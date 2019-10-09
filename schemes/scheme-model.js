@@ -20,7 +20,7 @@ function find() {
   }
   
   function findSteps(id) {
-    return
+    return db('schemes as s')
   }
   
   function add(scheme) {
