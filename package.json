@@ -4,7 +4,8 @@
   "description": "Challenge for Node DB3 Module",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js"
+    "server": "nodemon index.js",
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,6 @@
   },
   "devDependencies": {
     "nodemon": "^1.19.1"
-  }
+  },
+  "license": "ISC"
 }
