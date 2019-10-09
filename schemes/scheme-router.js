@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validateSchemeId, (req, res) => {
   const { id } = req.params;
 
   Schemes.findById(id)
@@ -30,7 +30,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.get('/:id/steps', (req, res) => {
+router.get('/:id/steps', validateSchemeId, (req, res) => {
   const { id } = req.params;
 
   Schemes.findSteps(id)
@@ -78,7 +78,7 @@ router.post('/:id/steps', (req, res) => {
   });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateSchemeId, validateScheme, (req, res) => {
   const { id } = req.params;
   const changes = req.body;
 
@@ -98,7 +98,7 @@ router.put('/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateSchemeId, (req, res) => {
   const { id } = req.params;
 
   Schemes.remove(id)
@@ -113,5 +113,31 @@ router.delete('/:id', (req, res) => {
     res.status(500).json({ message: 'Failed to delete scheme' });
   });
 });
+
+//Middleware
+
+function validateSchemeId(req, res, next) {
+  const id = req.params.id;
+  Schemes.findById(id)
+    .then(scheme => {
+      if (scheme[0]) {
+        res.status(200).json(scheme);
+      }
+    })
+    .catch(err => {
+      res.status(400).json({errorMessage: 'id is invalid'});
+    })
+    next();
+};
+
+function validateScheme(req, res, next) {
+  const schemeData = req.body;
+  if (!schemeData.scheme_name) {
+    res.status(400).json({errorMessage: 'scheme_name is required'});
+  } else {
+    console.log('scheme is validated')
+    next();
+  }
+};
 
 module.exports = router;
